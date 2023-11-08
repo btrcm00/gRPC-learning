@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+message SetupRequest{
+  string token = 1;
+}
+
+enum ServiceStatus {
+  TRAINING = 0;
+  ACTIVE = 1;
+  IDLE = 2;
+}
+
+message SetupResponse {
+  ServiceStatus status = 1;
+}
+
+message ImportRequest {
+  repeated bytes files = 1;
+}
+
+enum ImportStatus {
+  FAIL = 0;
+  SUCCESSFUL = 1;
+}
+
+message ImportResponse {
+  ImportStatus status = 1;
+}
+
+enum CommandType {
+  PREDICT = 0;
+  LOGGING = 1;
+  DOWNLOAD_CKPT = 2;
+  DATASET_CREATE = 3;
+}
+
+message CommandRequest {
+  CommandType command = 1;
+}
+
+message CommandResponse {
+  bool status = 1;
+}
+
+service Management{
+  rpc Setup(SetupRequest) returns (SetupResponse);
+  rpc Import(ImportRequest) returns (ImportResponse);
+  rpc Commands(CommandRequest) returns (CommandResponse);
+}
