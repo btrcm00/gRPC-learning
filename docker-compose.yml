@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+
+  system_management:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      API_HOST: localhost
+      API_PORT: 5050
+      DATA_PATH:
+      MODEL_PATH:
+      LOGGING_PATH:
+      CHECKPOINT_PATH:
+    networks:
+      - management_service
+
+networks:
+  management_service:
