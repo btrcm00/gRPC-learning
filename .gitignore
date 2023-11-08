@@ -1,3 +1,5 @@
 .env
 .idea
-services/dataset/firedata/
+services/data/dataset/
+__pycache__/
+*/__pycache__/

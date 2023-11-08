@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import model_management_pb2 as model__management__pb2
+import management_proto.model_management_pb2 as model__management__pb2
 
 
 class ManagementStub(object):
@@ -35,19 +35,22 @@ class ManagementServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def Setup(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Store and monitor the processing status of machine learning (ML), including active, training, etc.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def Import(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Upload raw data into the system, allowing multiple files uploads simultaneously
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def Commands(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Execute an action corresponding to the command type in the request
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')

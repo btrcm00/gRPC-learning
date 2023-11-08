@@ -3,10 +3,12 @@ import grpc
 
 from management_proto.model_management_pb2 import (
     SetupResponse,
-    CommandType
+    CommandType,
+    ServiceStatus,
+    ImportResponse
 )
 from management_proto import model_management_pb2_grpc
-from common.config import Config
+from common.config import Config, SystemStatus
 from services.processor import Processor
 
 
@@ -16,7 +18,7 @@ class ManagementService(model_management_pb2_grpc.ManagementServicer):
         self.processor = Processor(config=self.config)
 
     @property
-    def command_to_func(self):
+    def _command_to_func(self):
         return {
             CommandType.PREDICT: self.processor.predict,
             CommandType.LOGGING: self.processor.logging,
@@ -24,31 +26,41 @@ class ManagementService(model_management_pb2_grpc.ManagementServicer):
             CommandType.DATASET_CREATE: self.processor.create_dataset,
             CommandType.TRAIN: self.processor.train
         }
+    
+    @property
+    def _sys_status_to_response(self):
+        return {
+            SystemStatus.IDLE: ServiceStatus.IDLE,
+            SystemStatus.TRAINING: ServiceStatus.TRAINING,
+            SystemStatus.ACTIVE: ServiceStatus.ACTIVE,
+        }
 
     def Setup(self, request, context):
         status = self.processor.set_up(token=request.token)
-        return SetupResponse(status=status)
+        return SetupResponse(status=self._sys_status_to_response[status])
 
     def Import(self, request, context):
         files = request.files
-        raise NotImplementedError('Method not implemented!')
+        status = self.processor.import_files(files)
+        return ImportResponse(status=status)
 
     def Commands(self, request, context):
-        if request.command not in self.command_to_func.keys():
+        if request.command not in self._command_to_func.keys():
             raise ValueError("Command type not found!")
-        func = self.command_to_func[request.command]
+        func = self._command_to_func[request.command]
         func()
 
 
-def serve(api_port: str):
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+def serve(config: Config):
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=config.max_workers))
     model_management_pb2_grpc.add_ManagementServicer_to_server(
-        ManagementService(), server
+        ManagementService(config=config), server
     )
-    server.add_insecure_port(f"[::]:{api_port}")
+    server.add_insecure_port(f"[::]:{config.api_port}")
     server.start()
     server.wait_for_termination()
 
 
 if __name__ == "__main__":
-    serve(api_por="5051")
+    config = Config(api_port="5050")
+    serve(config=config)

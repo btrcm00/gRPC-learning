@@ -24,7 +24,7 @@ class Processor(BaseService):
             raise ValueError("status is not valid")
         self._status = _status
 
-    def set_up(self):
+    def set_up(self, token:str):
         if self.status == SystemStatus.IDLE:
             self.status = SystemStatus.ACTIVE
         return self.status

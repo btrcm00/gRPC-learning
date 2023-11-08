@@ -44,7 +44,10 @@ message CommandResponse {
 }
 
 service Management{
+  // Store and monitor the processing status of machine learning (ML), including active, training, etc.
   rpc Setup(SetupRequest) returns (SetupResponse);
+  // Upload raw data into the system, allowing multiple files uploads simultaneously
   rpc Import(ImportRequest) returns (ImportResponse);
+  // Execute an action corresponding to the command type in the request
   rpc Commands(CommandRequest) returns (CommandResponse);
 }
