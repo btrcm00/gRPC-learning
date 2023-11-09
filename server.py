@@ -1,5 +1,7 @@
 from concurrent import futures
 import grpc
+import base64
+import asyncio
 
 import management_proto.model_management_pb2 as manager_pb2
 from management_proto import model_management_pb2_grpc
@@ -29,14 +31,27 @@ class ManagementService(model_management_pb2_grpc.ManagementServicer):
             SystemStatus.ACTIVE: manager_pb2.ServiceStatus.ACTIVE
         }
 
+    def _check_base64(self, data):
+        _data = base64.b64decode(data)
+        if base64.b64encode(_data) == data:
+            return _data
+        return data
+
     def Setup(self, request, context):
         status = self.processor.set_up(token=request.token)
         return manager_pb2.SetupResponse(status=self._sys_status_to_response[status])
 
     def Import(self, request, context):
-        files = request.files
-        status = self.processor.import_files(files)
-        return manager_pb2.ImportResponse(status=status)
+        try:
+            for i, image_data in enumerate(request.data):
+                image_data = self._check_base64(image_data)
+                self.processor.import_file(image_data)
+        except Exception as e:
+            return manager_pb2.ImportResponse(
+                status=manager_pb2.Status.FAIL,
+                message=f"Encounter error while importing data: {e}"
+            )
+        return manager_pb2.ImportResponse(status=manager_pb2.Status.SUCCESSFUL)
 
     def Commands(self, request, context):
         if request.command not in self._command_to_func.keys():

@@ -57,8 +57,8 @@ class Processor(BaseService):
             return True
         return False
 
-    def import_files(self, data_files: list):
-        pass
+    def import_file(self, image_data):
+        self.data_manager.import_file(image_data=image_data)
 
     def download_ckpt(self):
         ckpt_path = self.trainer.get_ckpt_path()

@@ -15,7 +15,7 @@ message SetupResponse {
 }
 
 message ImportRequest {
-  repeated bytes files = 1;
+  repeated bytes data = 2;
 }
 
 enum Status {
@@ -25,6 +25,7 @@ enum Status {
 
 message ImportResponse {
   Status status = 1;
+  string message = 2;
 }
 
 enum CommandType {
