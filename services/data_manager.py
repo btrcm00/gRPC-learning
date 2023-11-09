@@ -1,5 +1,4 @@
-import base64
-import random
+from glob import glob
 
 from common.config import BaseService
 
@@ -8,28 +7,15 @@ class DataManager(BaseService):
     def __init__(self, config):
         super().__init__()
         self.config = config
+        self.saved_path = f"{self.config.data_path}/dataset/imported"
 
-    def _data_is_base64(self, data: str):
-        _data = base64.b64decode(data)
-        if base64.b64encode(_data) == data:
-            return _data
-        return None
-
-    async def import_file(self, data: str):
-        image_data = self._data_is_base64(data)
-        if image_data is None:
-            pass
+    def import_file(self, image_data):
+        current_files = glob(f"{self.saved_path}/*.jpg")
+        if not current_files:
+            file_idx = 0
         else:
-            file_idx = str(random.randint(100000, 999999))
-            with open(f"{self.config.data_path}/dataset/imported/image_{file_idx}", 'wb') as f:
-                f.write(image_data)
-
-    async def import_dataset(self, files: list):
-        try:
-            for f in files:
-                await self.import_file(f)
-        except Exception as e:
-            self.logger.error(f"File import process encounter the error {e}")
-            return False
-
-        return True
+            current_files = [int(f.split("\\")[-1].replace(".jpg", "")) for f in current_files]
+            current_files.sort()
+            file_idx = current_files[-1] + 1
+        with open(f"{self.saved_path}/{file_idx}.jpg", 'wb') as f:
+            f.write(image_data)
