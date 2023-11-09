@@ -1,3 +1,4 @@
+from glob import glob
 from ultralytics import YOLO
 
 from common.config import BaseService
@@ -11,11 +12,15 @@ class Trainer(BaseService):
 
     def train(self):
         self.logger.info("START TRANING YOLOv8 ...")
-        self.model = YOLO("yolov8n.pt")
-        self.model.train(data=f"{self.config.data_path}/data.yaml", epochs=3)
+        self.model = YOLO(model=f"{self.config.checkpoint_path}/base/yolov8n.pt", task="detect")
+        self.model.train(
+            data=f"{self.config.data_path}/data.yaml",
+            epochs=3,
+            save_dir=f"{self.config.checkpoint_path}/trained"
+        )
 
-    def eval(self):
-        self.model = YOLO(self.config.checkpoint_path)
+    def eval(self, ckpt_path: str):
+        self.model = YOLO(ckpt_path)
         metrics = self.model.eval()
         self.logger.info("METRICS of model", metrics)
 
@@ -23,5 +28,10 @@ class Trainer(BaseService):
         self.logger.info("Predicting an image ...")
         return self.model(image)
 
-    def download_ckpt(self):
-        pass
+    def get_ckpt_path(self):
+        ckpt_path = self.config.checkpoint_path
+        ckpt_files = glob(f"{ckpt_path}/trained/*.pt")
+        if not ckpt_files:
+            return f"{self.config.checkpoint_path}/yolov8n.pt"
+        else:
+            return ckpt_files[-1]
