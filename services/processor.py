@@ -1,3 +1,5 @@
+import multiprocessing
+
 from common.config import BaseService, SystemStatus
 from services.data_manager import DataManager
 from services.trainer import Trainer
@@ -9,10 +11,9 @@ class Processor(BaseService):
         self.config = config
         self.data_manager = DataManager(config=self.config)
         self.trainer = Trainer(config=self.config)
+        self.training_process = None
         self._status: SystemStatus = SystemStatus.IDLE
-
-    def start(self):
-        self._status = SystemStatus.ACTIVE
+        self._create_training_process()
 
     @property
     def status(self):
@@ -24,24 +25,43 @@ class Processor(BaseService):
             raise ValueError("status is not valid")
         self._status = _status
 
-    def set_up(self, token:str):
+    def set_up(self, token: str):
         if self.status == SystemStatus.IDLE:
             self.status = SystemStatus.ACTIVE
         return self.status
 
-    def train(self):
-        self.status = SystemStatus.TRAINING
+    def _create_training_process(self):
+        self.training_process = multiprocessing.Process(target=self._train, args=(), daemon=True)
+
+    def _train(self):
         self.trainer.train()
         self.status = SystemStatus.ACTIVE
 
-    def create_dataset(self):
+    def train(self):
+        self.logger.info("System triggered to training YOLOv8 ...")
+        self.status = SystemStatus.TRAINING
+        try:
+            self.training_process.start()
+        except Exception as e:
+            self.logger.error(f"Encounter the error when triggering training process: {e}")
+            self.status = SystemStatus.ACTIVE
+            return False
+        return True
+
+    def stop_training(self):
+        if self.status == SystemStatus.TRAINING:
+            self.logger.info("STOPPING the training process ...")
+            self.training_process.terminate()
+            self._create_training_process()
+            self.status = SystemStatus.ACTIVE
+            return True
+        return False
+
+    def import_files(self, data_files: list):
         pass
 
     def download_ckpt(self):
-        pass
+        ckpt_path = self.trainer.get_ckpt_path()
 
     def predict(self, image: str):
         return self.trainer.predict(image)
-
-    def logging(self):
-        pass

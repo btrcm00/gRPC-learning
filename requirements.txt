@@ -1,2 +1,4 @@
 grpcio-tools
+protobuf==3.20.*
+numpy==1.22.1
 ultralytics

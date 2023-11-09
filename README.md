@@ -9,4 +9,6 @@
     - `--python_out=./management_proto --grpc_python_out=./management_proto`: tells the compiler where to output the
       python files.
     - `./protobufs/model_management.proto`: is the path to protobuf file which will be used to generate python code.
-- 
+- Download the YOLOv8 checkpoint, locate it at `services/models/ckpt/base` folder
+    - Checkpoint: [yolov8n.pt](https://github.com/ultralytics/ultralytics#:~:text=FLOPs%0A(B)-,YOLOv8n,8.7,-YOLOv8s)
+- Download the dataset at [Dataset](https://github.com/entbappy/YOLO-v8-Object-Detection/blob/main/data.zip), then locate it in `services/data/dataset`

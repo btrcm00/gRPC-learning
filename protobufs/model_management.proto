@@ -18,21 +18,20 @@ message ImportRequest {
   repeated bytes files = 1;
 }
 
-enum ImportStatus {
+enum Status {
   FAIL = 0;
   SUCCESSFUL = 1;
 }
 
 message ImportResponse {
-  ImportStatus status = 1;
+  Status status = 1;
 }
 
 enum CommandType {
   PREDICT = 0;
-  LOGGING = 1;
-  DOWNLOAD_CKPT = 2;
-  DATASET_CREATE = 3;
-  TRAIN = 4;
+  DOWNLOAD_CKPT = 1;
+  TRAIN = 2;
+  STOP_TRAINING = 3;
 }
 
 message CommandRequest {
@@ -40,7 +39,7 @@ message CommandRequest {
 }
 
 message CommandResponse {
-  bool status = 1;
+  Status status = 1;
 }
 
 service Management{
