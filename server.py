@@ -1,12 +1,11 @@
 from concurrent import futures
 import grpc
 import base64
-import asyncio
 
 import management_proto.model_management_pb2 as manager_pb2
 from management_proto import model_management_pb2_grpc
 from common.config import Config, SystemStatus
-from services.processor import Processor
+from service.processor import Processor
 
 
 class ManagementService(model_management_pb2_grpc.ManagementServicer):
@@ -18,7 +17,7 @@ class ManagementService(model_management_pb2_grpc.ManagementServicer):
     def _command_to_func(self):
         return {
             manager_pb2.CommandType.PREDICT: self.processor.predict,
-            manager_pb2.CommandType.DOWNLOAD_CKPT: self.processor.download_ckpt,
+            manager_pb2.CommandType.DOWNLOAD_CKPT: self.processor.get_ckpt,
             manager_pb2.CommandType.TRAIN: self.processor.train,
             manager_pb2.CommandType.STOP_TRAINING: self.processor.stop_training
         }
@@ -54,11 +53,30 @@ class ManagementService(model_management_pb2_grpc.ManagementServicer):
         return manager_pb2.ImportResponse(status=manager_pb2.Status.SUCCESSFUL)
 
     def Commands(self, request, context):
-        if request.command not in self._command_to_func.keys():
+        if request.command == manager_pb2.CommandType.DOWNLOAD_CKPT:
+            ckpt_path = self.processor.get_ckpt()
+            with open(ckpt_path, 'rb') as f:
+                content = f.read()
+            return manager_pb2.CommandResponse(file=content)
+
+        elif request.command == manager_pb2.CommandType.PREDICT:
+            import random
+            idx  = str(random.randint(1000,9999))
+            with open(f"image_{idx}.jpg", 'wb') as f:
+                f.write(request.file)
+            prediction = self.processor.predict(image=f"image_{idx}.jpg")
+            return manager_pb2.CommandResponse(message=prediction)
+
+        elif request.command == manager_pb2.CommandType.TRAIN:
+            done = self.processor.train()
+
+        elif request.command == manager_pb2.CommandType.STOP_TRAINING:
+            done = self.processor.stop_training()
+
+        else:
             raise ValueError("Command type not found!")
-        func = self._command_to_func[request.command]
-        output = func()
-        if output:
+
+        if done:
             status = manager_pb2.Status.SUCCESSFUL
         else:
             status = manager_pb2.Status.FAIL
@@ -76,5 +94,5 @@ def serve(config: Config):
 
 
 if __name__ == "__main__":
-    config = Config(api_port="5050")
+    config = Config()
     serve(config=config)

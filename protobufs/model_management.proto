@@ -37,10 +37,16 @@ enum CommandType {
 
 message CommandRequest {
   CommandType command = 1;
+  bytes file = 2;
 }
 
 message CommandResponse {
-  Status status = 1;
+  oneof response {
+    Status status = 1;
+    bytes file = 2;
+    string message = 3;
+  }
+
 }
 
 service Management{

@@ -1,7 +1,7 @@
 .env
 .idea
-services/data/dataset/
+service/data/dataset/
 __pycache__/
 */__pycache__/
-services/logs
+service/logs
 runs/
