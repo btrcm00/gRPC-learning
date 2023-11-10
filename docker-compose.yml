@@ -1,17 +1,16 @@
-version: "3.8"
 services:
-
-  system_management:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  systemmanagement:
+    build: .
+    restart: always
     environment:
-      API_HOST: localhost
-      API_PORT: 5050
-      DATA_PATH: services/data
-      MODEL_PATH:
-      LOGGING_PATH:
-      CHECKPOINT_PATH:
+      - API_PORT=${API_PORT}
+      - DATA_PATH=${DATA_PATH}
+      - LOGGING_PATH=${LOGGING_PATH}
+      - CHECKPOINT_PATH=${CHECKPOINT_PATH}
+    ports:
+      - 8888:8080
+    volumes:
+      - ./service/model/ckpt:/app/service/model/ckpt
     networks:
       - management_service
 

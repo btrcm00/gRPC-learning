@@ -13,19 +13,19 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16model_management.proto\"\x1d\n\x0cSetupRequest\x12\r\n\x05token\x18\x01 \x01(\t\"/\n\rSetupResponse\x12\x1e\n\x06status\x18\x01 \x01(\x0e\x32\x0e.ServiceStatus\"\x1d\n\rImportRequest\x12\x0c\n\x04\x64\x61ta\x18\x02 \x03(\x0c\":\n\x0eImportResponse\x12\x17\n\x06status\x18\x01 \x01(\x0e\x32\x07.Status\x12\x0f\n\x07message\x18\x02 \x01(\t\"/\n\x0e\x43ommandRequest\x12\x1d\n\x07\x63ommand\x18\x01 \x01(\x0e\x32\x0c.CommandType\"*\n\x0f\x43ommandResponse\x12\x17\n\x06status\x18\x01 \x01(\x0e\x32\x07.Status*3\n\rServiceStatus\x12\x0c\n\x08TRAINING\x10\x00\x12\n\n\x06\x41\x43TIVE\x10\x01\x12\x08\n\x04IDLE\x10\x02*\"\n\x06Status\x12\x08\n\x04\x46\x41IL\x10\x00\x12\x0e\n\nSUCCESSFUL\x10\x01*K\n\x0b\x43ommandType\x12\x0b\n\x07PREDICT\x10\x00\x12\x11\n\rDOWNLOAD_CKPT\x10\x01\x12\t\n\x05TRAIN\x10\x02\x12\x11\n\rSTOP_TRAINING\x10\x03\x32\x8e\x01\n\nManagement\x12&\n\x05Setup\x12\r.SetupRequest\x1a\x0e.SetupResponse\x12)\n\x06Import\x12\x0e.ImportRequest\x1a\x0f.ImportResponse\x12-\n\x08\x43ommands\x12\x0f.CommandRequest\x1a\x10.CommandResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16model_management.proto\"\x1d\n\x0cSetupRequest\x12\r\n\x05token\x18\x01 \x01(\t\"/\n\rSetupResponse\x12\x1e\n\x06status\x18\x01 \x01(\x0e\x32\x0e.ServiceStatus\"\x1d\n\rImportRequest\x12\x0c\n\x04\x64\x61ta\x18\x02 \x03(\x0c\":\n\x0eImportResponse\x12\x17\n\x06status\x18\x01 \x01(\x0e\x32\x07.Status\x12\x0f\n\x07message\x18\x02 \x01(\t\"=\n\x0e\x43ommandRequest\x12\x1d\n\x07\x63ommand\x18\x01 \x01(\x0e\x32\x0c.CommandType\x12\x0c\n\x04\x66ile\x18\x02 \x01(\x0c\"[\n\x0f\x43ommandResponse\x12\x19\n\x06status\x18\x01 \x01(\x0e\x32\x07.StatusH\x00\x12\x0e\n\x04\x66ile\x18\x02 \x01(\x0cH\x00\x12\x11\n\x07message\x18\x03 \x01(\tH\x00\x42\n\n\x08response*3\n\rServiceStatus\x12\x0c\n\x08TRAINING\x10\x00\x12\n\n\x06\x41\x43TIVE\x10\x01\x12\x08\n\x04IDLE\x10\x02*\"\n\x06Status\x12\x08\n\x04\x46\x41IL\x10\x00\x12\x0e\n\nSUCCESSFUL\x10\x01*K\n\x0b\x43ommandType\x12\x0b\n\x07PREDICT\x10\x00\x12\x11\n\rDOWNLOAD_CKPT\x10\x01\x12\t\n\x05TRAIN\x10\x02\x12\x11\n\rSTOP_TRAINING\x10\x03\x32\x8e\x01\n\nManagement\x12&\n\x05Setup\x12\r.SetupRequest\x1a\x0e.SetupResponse\x12)\n\x06Import\x12\x0e.ImportRequest\x1a\x0f.ImportResponse\x12-\n\x08\x43ommands\x12\x0f.CommandRequest\x1a\x10.CommandResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'model_management_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
-  _globals['_SERVICESTATUS']._serialized_start=290
-  _globals['_SERVICESTATUS']._serialized_end=341
-  _globals['_STATUS']._serialized_start=343
-  _globals['_STATUS']._serialized_end=377
-  _globals['_COMMANDTYPE']._serialized_start=379
-  _globals['_COMMANDTYPE']._serialized_end=454
+  _globals['_SERVICESTATUS']._serialized_start=353
+  _globals['_SERVICESTATUS']._serialized_end=404
+  _globals['_STATUS']._serialized_start=406
+  _globals['_STATUS']._serialized_end=440
+  _globals['_COMMANDTYPE']._serialized_start=442
+  _globals['_COMMANDTYPE']._serialized_end=517
   _globals['_SETUPREQUEST']._serialized_start=26
   _globals['_SETUPREQUEST']._serialized_end=55
   _globals['_SETUPRESPONSE']._serialized_start=57
@@ -35,9 +35,9 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_IMPORTRESPONSE']._serialized_start=137
   _globals['_IMPORTRESPONSE']._serialized_end=195
   _globals['_COMMANDREQUEST']._serialized_start=197
-  _globals['_COMMANDREQUEST']._serialized_end=244
-  _globals['_COMMANDRESPONSE']._serialized_start=246
-  _globals['_COMMANDRESPONSE']._serialized_end=288
-  _globals['_MANAGEMENT']._serialized_start=457
-  _globals['_MANAGEMENT']._serialized_end=599
+  _globals['_COMMANDREQUEST']._serialized_end=258
+  _globals['_COMMANDRESPONSE']._serialized_start=260
+  _globals['_COMMANDRESPONSE']._serialized_end=351
+  _globals['_MANAGEMENT']._serialized_start=520
+  _globals['_MANAGEMENT']._serialized_end=662
 # @@protoc_insertion_point(module_scope)
