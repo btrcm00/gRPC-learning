@@ -4,6 +4,10 @@
 - We can use gRPC API to trigger training process, import data, checking system status, ...
 - Try training process with YOLOv8
 
+## Demo:
+
+- [Demo](demo/demo_gRPC_docker.mp4)
+
 ## Development steps:
 
 - Install required packages: `pip install -r requirements.txt`
